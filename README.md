@@ -1,2 +1,4 @@
 # Bird_Simulator_2016
-It's a game with a bird in it!
+An action adventure game with a bird protagonist!
+
+The project proposal (proposal.pdf) can be found at the top level of the repo.

@@ -1,0 +1,23 @@
+
+
+5/15/16:
+
+	CT: 
+		Updated:
+			src/Bird.java
+			src/readme
+
+		Created:
+			src/Entity.java
+			src/Environment.java
+			changelog.txt
+
+		Some of the logic of Bird.java (i.e. coordinate position information, and velocity information, as well as the functions used to
+		update position) was useful for general purposes, so I moved it to a superclass called Entity.java which can be used to
+		create other NPCs or objects besides Bird.
+
+		I also created a small class to hold important Environment variables (i.e. where the bottom-top / left-right edges of the
+		map are) so they can be accessed from throughout the engine, and freely updated from 1 place.
+
+		I also created a changelog for us to use to keep track of what changes have already been made.
+			

@@ -171,9 +171,7 @@ public class Main extends Applet implements Runnable, KeyListener {
         
         switch (e.getKeyCode()) {
                 
-                // Right now, W is jump. I think it would be good to have
-                // W be the jump, the double-jump, and the triple-jump, and
-                // have K be the glide button.
+                // Jump / Double Jump
             case KeyEvent.VK_W:
                 bird.jump();
                 System.out.println("Jumped");
@@ -182,7 +180,8 @@ public class Main extends Applet implements Runnable, KeyListener {
                 // Move Left
             case KeyEvent.VK_A:
                 bird.moveLeft();
-                System.out.println("Moving left");
+                System.out.println("Moving left");	
+
                 break;
                 
                 // Insert divebomb stuff here
@@ -191,12 +190,15 @@ public class Main extends Applet implements Runnable, KeyListener {
                 
                 // Move right
             case KeyEvent.VK_D:
-                bird.moveRight();
-                System.out.println("Moving right");
+            	bird.moveRight();
+                System.out.println("Moving right");	
+            	
                 break;
                 
-                // Possibly insert glide function here
+                // Glide
             case KeyEvent.VK_K:
+            	bird.glide();
+            	System.out.println("Gliding");
                 break;
                 
         }
@@ -211,14 +213,18 @@ public class Main extends Applet implements Runnable, KeyListener {
                 break;
                 
             case KeyEvent.VK_A:
-                bird.stop();
+            	if(!bird.isGliding()){
+            		bird.stop();         		
+            	}
                 break;
                 
             case KeyEvent.VK_S:
                 break;
                 
             case KeyEvent.VK_D:
-                bird.stop();
+            	if(!bird.isGliding()){
+            		bird.stop();         		
+            	}
                 break;
                 
             case KeyEvent.VK_K:

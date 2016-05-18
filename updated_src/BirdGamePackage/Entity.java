@@ -75,6 +75,12 @@ public class Entity {
         this.velocityY = 0;
     }
     
+    // A method for completely stopping
+    protected void completeStop(){
+    	this.velocityX = 0;
+    	this.velocityY = 0;
+    }
+    
     // A method for determining if an Entity is on the ground
     protected boolean isOnGround(){
         if (this.positionY >= Environment.FLOOR - this.height){

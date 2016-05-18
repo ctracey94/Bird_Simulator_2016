@@ -14,9 +14,12 @@ import BirdGamePackage.Entity;
 public class Bird extends Entity{
     
     // Private variables for bird movement
-    private float speed = 5;
+    private float speed = 4;
     private float jumpStrength = -5f;
     private boolean	jumped = true;
+    private int jumps = 0;
+    private boolean gliding = false;
+    private boolean facingRight = true;
     
     // Constructor for Bird class (calls Entity constructor)
     public Bird(float x, float y, int width, int height){
@@ -29,24 +32,37 @@ public class Bird extends Entity{
         
         // If the bird is on the ground, reset jumped boolean
         if(isOnGround()){
+        	if(gliding){
+        		super.completeStop();
+        	}
             jumped = false;
+            jumps = 0;
+            gliding = false;
         }
         
-        // If the jumped boolean is true, gravity
-        // takes effect and pulls him to Earth
-        if (jumped){
-            this.velocityY += 0.1f;
+        // Gravity logic
+        // if the bird is gliding, he isn't as affected by gravity
+        if(gliding){
+        	this.velocityY += (Environment.GRAVITY*0.5);
+        } else {
+        	this.velocityY += Environment.GRAVITY;
         }
     }
     
-    // moves bird left at a rate specified by the speed variable
+    // moves bird left at a rate specified by the speed variable (unless gliding)
     public void moveLeft(){
-        super.moveLeft(speed);
+    	if(!gliding){
+    		super.moveLeft(speed);
+    		facingRight = false;
+    	}
     }
     
-    // moves bird right at a rate specified by the speed variable
+    // moves bird right at a rate specified by the speed variable (unless gliding)
     public void moveRight(){
-        super.moveRight(speed);
+    	if(!gliding){
+    		super.moveRight(speed);
+    		facingRight = true;
+    	}
     }
     
     // Stops bird on x-axis
@@ -54,13 +70,53 @@ public class Bird extends Entity{
         super.xStop();
     }
     
-    // If this function is invoked, if he's not already jumping,
-    // he'll move upward whatever his jumpStrength is for each
-    // update and jumped will be set to true (so he can't jump again - for now)
+    // A method allowing the bird to jump.
+    // if the bird has already jumped, he can double jump
+    // if he's close to the apex of his jump arc, his double jump
+    // gives him a little boost.
     public void jump(){
-        if (!jumped){
-            this.velocityY = jumpStrength;
+        if (jumps == 0){
+        	jumps ++;
             jumped = true;
+        	gliding = false;
+        	
+            this.velocityY = jumpStrength;
+
+        } else if (jumps == 1){
+        	jumps ++;
+        	gliding = false;
+        	
+        	if(this.velocityY >= 0){
+        		this.velocityY = jumpStrength + 0.5f;
+        	} else if(this.velocityY >= -1){
+        		this.velocityY = jumpStrength - 1.25f;
+        	} else if(this.velocityY >= -3){
+        		this.velocityY = jumpStrength;
+        	} else {
+        		this.velocityY = jumpStrength - 1f;
+        	}
+        } else {
+        	//do nothing; no more jumps!
         }
+    }
+    
+    // A method that allows the bird to glide in the direction he's facing
+    public void glide(){
+    	if(!gliding && jumped){
+    		gliding = true;
+    		
+    		super.completeStop();		// nullify velocity for motion control
+    		
+    		if(facingRight){
+    			velocityX = speed*2f;
+    		} else {
+    			velocityX = -(speed*2f);
+    		}
+    	}
+    }
+    
+    // A method to see if bird is gliding
+    public boolean isGliding(){
+    	return gliding;
     }
 }

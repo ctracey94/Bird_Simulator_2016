@@ -31,7 +31,7 @@ public class Main extends Applet implements Runnable, KeyListener {
     // Declares a Bird object (main character) and
     // and a picture to go along with that object
     private static Bird bird;
-    private Image image, test_bird;
+    private Image image, test_bird, test_bg;
     
     private Graphics graphics;
     
@@ -65,6 +65,7 @@ public class Main extends Applet implements Runnable, KeyListener {
         // At some point, I think it would be a good idea to create
         // an Asset Initializer class that does this work for us.
         test_bird = getImage(base, "resources/test_bird.png");
+        test_bg = getImage(base, "resources/background.png");
         
     }
     
@@ -76,7 +77,9 @@ public class Main extends Applet implements Runnable, KeyListener {
         // Creates Bird object and assigns him to the top-left
         // corner of the screen (0, 0). The coordinate system
         // starts up there. His width and height are set to 32.
-        bird = new Bird(0, 0, 32, 32);
+        bg1 = new Background(0, 0);
+        bg2 = new Background(900, 0);
+        bird = new Bird(0, 0, 30, 30);
         // TODO Tile initialization
         //try {
         //	loadMap("resources/map1.txt");
@@ -91,7 +94,27 @@ public class Main extends Applet implements Runnable, KeyListener {
     
     // Load map function for the tiles
     private void loadMap(String filename) throws IOException {
-        // TODO you know do this
+         // not sure of format of intended txt input file
+        int[][] tileMap = new int[20][30]; // int[row][col] are changable
+        
+        String line = " ";
+        int row_counter = 0;
+        try {
+            FileReader fr = new FileReader(filename);
+            BufferedReader bf = new BufferedReader(fr);
+            
+            while((line = bf.readLine()) != null) {
+                String[] vals = line.trim().split("\\s+");
+
+                for (int i = 0; i < 30; i++ )
+                    tileMap[row_counter][i] = Integer.parseInt(vals[i]);
+
+                row_counter++;
+            }
+            
+        }
+        catch(FileNotFoundException e) {e.printStackTrace();}
+        catch(IOException e) {e.printStackTrace();}
     }
     
     @Override
@@ -113,6 +136,8 @@ public class Main extends Applet implements Runnable, KeyListener {
             
             while (true) {
                 bird.update();
+                bg1.update();
+                bg2.update();
                 
                 animate();
                 repaint();
@@ -157,6 +182,8 @@ public class Main extends Applet implements Runnable, KeyListener {
             
             // First argument is the image, then the Bird object's X and
             // Y coordinates.
+            g.drawImage(test_bg, bg1.getBgX(), bg1.getBgY(), this);
+            g.drawImage(test_bg, bg2.getBgX(), bg2.getBgY(), this);
             g.drawImage(test_bird, (int)bird.getX(), (int)bird.getY(), this);
             
         } else if (state == GameState.Dead) {

@@ -15,11 +15,13 @@ public class Bird extends Entity{
     
     // Private variables for bird movement
     private float speed = 4;
-    private float jumpStrength = -5f;
+    private float jumpStrength = -7.5f;
     private boolean	jumped = true;
     private int jumps = 0;
     private boolean gliding = false;
+    private boolean glided = false;
     private boolean facingRight = true;
+    
     
     // Constructor for Bird class (calls Entity constructor)
     public Bird(float x, float y, int width, int height){
@@ -31,19 +33,21 @@ public class Bird extends Entity{
         super.update_position();
         
         // If the bird is on the ground, reset jumped boolean
+        // If the bird is gliding, nullify x velocity
         if(isOnGround()){
-        	if(gliding){
-        		super.completeStop();
+        	if(gliding || glided){
+        		super.xStop();
+        		gliding = false;
+        		glided = false;
         	}
             jumped = false;
             jumps = 0;
-            gliding = false;
         }
         
         // Gravity logic
         // if the bird is gliding, he isn't as affected by gravity
         if(gliding){
-        	this.velocityY += (Environment.GRAVITY*0.5);
+        	this.velocityY += (Environment.GRAVITY*0.3);
         } else {
         	this.velocityY += Environment.GRAVITY;
         }
@@ -78,7 +82,7 @@ public class Bird extends Entity{
         if (jumps == 0){
         	jumps ++;
             jumped = true;
-        	gliding = false;
+            gliding = false;
         	
             this.velocityY = jumpStrength;
 
@@ -101,9 +105,11 @@ public class Bird extends Entity{
     }
     
     // A method that allows the bird to glide in the direction he's facing
+    // if he's airborne
     public void glide(){
     	if(!gliding && jumped){
     		gliding = true;
+    		glided = true;
     		
     		super.completeStop();		// nullify velocity for motion control
     		

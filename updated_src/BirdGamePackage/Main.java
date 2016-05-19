@@ -2,6 +2,7 @@
 
 package BirdGamePackage;
 
+// standard lib imports
 import java.applet.Applet;
 import java.awt.Color;
 import java.awt.Font;
@@ -11,11 +12,16 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+
+// BirdGamePackage local imports
 import BirdGamePackage.Bird;
+import BirdGamePackage.Environment;
+import BirdGamePackage.Background;
 
 public class Main extends Applet implements Runnable, KeyListener {
     
@@ -32,6 +38,7 @@ public class Main extends Applet implements Runnable, KeyListener {
     // and a picture to go along with that object
     private static Bird bird;
     private Image image, test_bird, test_bg;
+    private Background bg1, bg2;
     
     private Graphics graphics;
     

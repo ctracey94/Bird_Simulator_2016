@@ -20,7 +20,7 @@ public class Entity {
     //**Note: Y-coordinate system is flipped (a negative y indicates up)
     protected float positionX, positionY;
     protected float velocityX, velocityY;
-    protected int 	width, height;
+    protected int width, height;
     
     // Constructor
     protected Entity(float x, float y, int width, int height){

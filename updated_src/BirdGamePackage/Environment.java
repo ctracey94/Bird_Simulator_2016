@@ -16,5 +16,5 @@ public class Environment {
     public static int RIGHT_EDGE = 900;
     public static int LEFT_EDGE = 0;
     
-    public static float GRAVITY = .12f;
+    public static float GRAVITY = .35f;
 }

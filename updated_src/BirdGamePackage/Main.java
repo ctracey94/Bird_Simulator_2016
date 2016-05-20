@@ -214,18 +214,20 @@ public class Main extends Applet implements Runnable, KeyListener {
                 // Move Left
             case KeyEvent.VK_A:
                 bird.moveLeft();
-                System.out.println("Moving left");	
+                System.out.println("Moving left");           		
+	
 
                 break;
                 
-                // Insert divebomb stuff here
             case KeyEvent.VK_S:
+            	bird.diveBomb();
                 break;
                 
                 // Move right
             case KeyEvent.VK_D:
             	bird.moveRight();
                 System.out.println("Moving right");	
+	
             	
                 break;
                 
@@ -247,7 +249,7 @@ public class Main extends Applet implements Runnable, KeyListener {
                 break;
                 
             case KeyEvent.VK_A:
-            	if(!bird.isGliding()){
+            	if(bird.isMovingLeft()){
             		bird.stop();         		
             	}
                 break;
@@ -256,7 +258,7 @@ public class Main extends Applet implements Runnable, KeyListener {
                 break;
                 
             case KeyEvent.VK_D:
-            	if(!bird.isGliding()){
+            	if(bird.isMovingRight()){
             		bird.stop();         		
             	}
                 break;

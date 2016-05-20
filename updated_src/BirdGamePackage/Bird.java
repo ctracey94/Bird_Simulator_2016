@@ -12,6 +12,11 @@ package BirdGamePackage;
 import BirdGamePackage.Entity;
 
 public class Bird extends Entity{
+	
+	// An enum to capture the movement state of the bird
+	enum MovStateX {
+		MovingRight, MovingLeft, Static
+	}
     
     // Private variables for bird movement
     private float speed = 5;
@@ -20,7 +25,9 @@ public class Bird extends Entity{
     private int jumps = 0;
     private boolean gliding = false;
     private boolean glided = false;
+    private boolean diveBombing = false;
     private boolean facingRight = true;
+    private MovStateX movStateX = MovStateX.Static;
     
     
     // Constructor for Bird class (calls Entity constructor)
@@ -35,13 +42,31 @@ public class Bird extends Entity{
         // If the bird is on the ground, reset jumped boolean
         // If the bird is gliding, nullify x velocity
         if(isOnGround()){
+        	
+        	//if the bird was gliding, end his glide
         	if(gliding || glided){
-        		super.xStop();
+        		
         		gliding = false;
         		glided = false;
+        		
+        		//stop bird if no movement key is being pressed, otherwise 
+        		//transition back into normal x-axis movement
+        		if(movStateX == MovStateX.Static){
+        			super.xStop();
+        		} else if(movStateX == MovStateX.MovingRight){
+        			this.velocityX = speed;	
+        		} else if(movStateX == MovStateX.MovingLeft){
+        			this.velocityX = -speed;
+        		}
+
         	}
+        	
+        	//reset jump ability
             jumped = false;
             jumps = 0;
+            
+            //reset diveBomb ability
+            diveBombing = false;
         }
         
         // Gravity logic
@@ -51,6 +76,10 @@ public class Bird extends Entity{
         } else {
         	this.velocityY += Environment.GRAVITY;
         }
+        
+        if(diveBombing){
+        	this.velocityY += Environment.GRAVITY*4;
+        }
     }
     
     // moves bird left at a rate specified by the speed variable (unless gliding)
@@ -59,6 +88,8 @@ public class Bird extends Entity{
     		super.moveLeft(speed);
     		facingRight = false;
     	}
+    	
+		movStateX = MovStateX.MovingLeft;
     }
     
     // moves bird right at a rate specified by the speed variable (unless gliding)
@@ -67,11 +98,17 @@ public class Bird extends Entity{
     		super.moveRight(speed);
     		facingRight = true;
     	}
+    	
+		movStateX = MovStateX.MovingRight;
     }
     
     // Stops bird on x-axis
     public void stop(){
-        super.xStop();
+    	if(!gliding){
+            super.xStop();
+    	}
+    	
+        movStateX = MovStateX.Static;
     }
     
     // A method allowing the bird to jump.
@@ -121,9 +158,33 @@ public class Bird extends Entity{
     	}
     }
     
+    // A method that allows the bird to divebomb to the ground if he's gliding
+    public void diveBomb(){
+    	if(gliding){
+    		diveBombing = true;
+    		this.xStop();
+    		movStateX = MovStateX.Static;
+    		this.velocityY = speed;
+    	}
+    }
+    
+    
+    
     // A getter method for the gliding boolean
     // Tells us if the bird is gliding or not
     public boolean isGliding(){
     	return gliding;
+    }
+    
+    public boolean isMovingLeft(){
+    	return movStateX == MovStateX.MovingLeft;
+    }
+    
+    public boolean isMovingRight(){
+    	return movStateX == MovStateX.MovingRight;
+    }
+    
+    public boolean isStatic(){
+    	return movStateX == MovStateX.Static;
     }
 }

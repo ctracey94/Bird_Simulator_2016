@@ -14,8 +14,8 @@ import BirdGamePackage.Entity;
 public class Bird extends Entity{
     
     // Private variables for bird movement
-    private float speed = 4;
-    private float jumpStrength = -7.5f;
+    private float speed = 5;
+    private float jumpStrength = -9f;
     private boolean	jumped = true;
     private int jumps = 0;
     private boolean gliding = false;
@@ -114,14 +114,15 @@ public class Bird extends Entity{
     		super.completeStop();		// nullify velocity for motion control
     		
     		if(facingRight){
-    			velocityX = speed*2f;
+    			velocityX = speed*2.5f;
     		} else {
-    			velocityX = -(speed*2f);
+    			velocityX = -(speed*2.5f);
     		}
     	}
     }
     
-    // A method to see if bird is gliding
+    // A getter method for the gliding boolean
+    // Tells us if the bird is gliding or not
     public boolean isGliding(){
     	return gliding;
     }

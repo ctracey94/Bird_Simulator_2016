@@ -11,6 +11,9 @@ public class Controller extends Applet {
 		setSize(900, 600);
 		setFocusable(true);
 		
+		setLayout(new BorderLayout());
+		this.add(BorderLayout.CENTER, view);
+		
 		Frame frame = (Frame) this.getParent().getParent();
 		frame.setTitle("Factory Bird");	
 		

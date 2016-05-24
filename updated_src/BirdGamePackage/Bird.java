@@ -1,4 +1,4 @@
-package BirdGamePackage;
+package testPackage;
 
 /*
  * Bird.java
@@ -9,7 +9,7 @@ package BirdGamePackage;
  * (or "player character") of Bird Simulator 2016, who is in fact a bird.
  */
 
-import BirdGamePackage.Entity;
+
 
 public class Bird extends Entity{
 	

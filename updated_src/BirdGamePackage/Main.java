@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import BirdGamePackage.Bird;
 import BirdGamePackage.Environment;
 import BirdGamePackage.Background;
+import BirdGamePackage.Enemies.Enemy;
+import BirdGamePackage.Enemies.Robot_weak;
+import BirdGamePackage.Enemies.Robot_helmet;
+import BirdGamePackage.Enemies.Robot_fire;
 
 public class Main extends Applet implements Runnable, KeyListener {
     
@@ -37,7 +41,8 @@ public class Main extends Applet implements Runnable, KeyListener {
     // Declares a Bird object (main character) and
     // and a picture to go along with that object
     private static Bird bird;
-    private Image image, test_bird, test_bg;
+    private static ArrayList<Enemy> enemies;					// CCT: a list for enemies
+    private Image image, test_bird, test_bg, test_enemy; 		//TODO: replace images with animations 		 
     private Background bg1, bg2;
     
     private Graphics graphics;
@@ -72,6 +77,7 @@ public class Main extends Applet implements Runnable, KeyListener {
         // At some point, I think it would be a good idea to create
         // an Asset Initializer class that does this work for us.
         test_bird = getImage(base, "resources/test_bird.png");
+        test_enemy = getImage(base, "resources/robot_weak_walk0000.png"); // CCT: load enemy image
         test_bg = getImage(base, "resources/background.png");
         
     }
@@ -87,6 +93,8 @@ public class Main extends Applet implements Runnable, KeyListener {
         bg1 = new Background(0, 0);
         bg2 = new Background(900, 0);
         bird = new Bird(0, 0, 30, 30);
+        enemies = new ArrayList<Enemy>();						//  CCT: make arrayList for all enemies
+        enemies.add(new Robot_weak(450, 550, 30, 30, 300, 600)); // CCT: add enemy instantiations here, for now they will all be represented by weak_robots image
         // TODO Tile initialization
         //try {
         //	loadMap("resources/map1.txt");
@@ -143,6 +151,9 @@ public class Main extends Applet implements Runnable, KeyListener {
             
             while (true) {
                 bird.update();
+                for(int i=0; i<enemies.size(); i++){		// CCT
+                	enemies.get(i).update();				// CCT: update all enemies
+                }
                 bg1.update();
                 bg2.update();
                 
@@ -191,6 +202,9 @@ public class Main extends Applet implements Runnable, KeyListener {
             // Y coordinates.
             g.drawImage(test_bg, bg1.getBgX(), bg1.getBgY(), this);
             g.drawImage(test_bg, bg2.getBgX(), bg2.getBgY(), this);
+            for(int i=0; i<enemies.size(); i++){														// CCT: 
+            	g.drawImage(test_enemy, (int)enemies.get(i).getX(), (int)enemies.get(i).getY(), this);	// CCT: draw all enemies
+            }
             g.drawImage(test_bird, (int)bird.getX(), (int)bird.getY(), this);
             
         } else if (state == GameState.Dead) {
@@ -227,8 +241,6 @@ public class Main extends Applet implements Runnable, KeyListener {
             case KeyEvent.VK_D:
             	bird.moveRight();
                 System.out.println("Moving right");	
-	
-            	
                 break;
                 
                 // Glide

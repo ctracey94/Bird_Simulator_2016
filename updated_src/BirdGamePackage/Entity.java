@@ -22,6 +22,8 @@ public class Entity {
     protected float velocityX, velocityY;
     protected int width, height;
     
+    protected boolean alive = true;
+    
     // Constructor
     protected Entity(float x, float y, int width, int height){
         this.positionX = x;
@@ -36,7 +38,7 @@ public class Entity {
         this.positionY += this.velocityY;
         
         // collision logic for floor of game environment
-        if (this.positionY >= Environment.FLOOR - this.height){
+        if ((this.positionY >= Environment.FLOOR - this.height) && alive){
             this.velocityY = 0;
             this.positionY = Environment.FLOOR - this.height;
         }
@@ -97,6 +99,11 @@ public class Entity {
     // A method for getting positionX of Entity
     public float getY(){
         return this.positionY;
+    }
+    
+    // A method to kill an Entity
+    public void kill(){
+    	alive = false;
     }
     
     

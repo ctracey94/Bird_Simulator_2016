@@ -1,4 +1,4 @@
-package testPackage;
+package BirdChallengePackage;
 
 /*
  * Bird.java
@@ -9,7 +9,7 @@ package testPackage;
  * (or "player character") of Bird Simulator 2016, who is in fact a bird.
  */
 
-
+import BirdChallengePackage.Entity;
 
 public class Bird extends Entity{
 	
@@ -29,6 +29,8 @@ public class Bird extends Entity{
     private boolean facingRight = true;
     private MovStateX movStateX = MovStateX.Static;
     
+    private static Background bg1 = Main.getBg1();
+    private static Background bg2 = Main.getBg2();
     
     // Constructor for Bird class (calls Entity constructor)
     public Bird(float x, float y, int width, int height){
@@ -80,6 +82,18 @@ public class Bird extends Entity{
         if(diveBombing){
         	this.velocityY += Environment.GRAVITY*4;
         }
+        
+        // Background Scrolling Information
+        if (super.velocityX == 0 || super.velocityX < 0){
+        	bg1.setSpeedX(0);
+        	bg2.setSpeedX(0);
+        }
+        
+        if (super.velocityX > 0 && super.positionX > 200){
+        	bg1.setSpeedX((int)-super.velocityX);
+        	bg2.setSpeedX((int)-super.velocityX);
+        }
+        
     }
     
     // moves bird left at a rate specified by the speed variable (unless gliding)
@@ -186,5 +200,13 @@ public class Bird extends Entity{
     
     public boolean isStatic(){
     	return movStateX == MovStateX.Static;
+    }
+    
+    public boolean isFacingRight(){
+    	return facingRight;
+    }
+    
+    public void setFacingRight(boolean b){
+    	facingRight = b;
     }
 }

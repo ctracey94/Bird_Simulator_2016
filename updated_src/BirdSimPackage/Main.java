@@ -42,7 +42,6 @@ public class Main extends Applet implements Runnable, KeyListener {
     // Declares a Bird object (main character) and
     // and a picture to go along with that object
     private static Bird bird;
-    private static ArrayList<Enemy> enemies;
     private Image image, bg, test_enemy, currentSprite;
     private Image bird_stand_right, bird_walk_right_1, bird_walk_right_2;
     private Image bird_stand_left, bird_walk_left_1, bird_walk_left_2;
@@ -112,7 +111,7 @@ public class Main extends Applet implements Runnable, KeyListener {
         
         currentSprite = bird_stand_right;
         bg = getImage(base, "resources/background.png");
-        test_enemy = getImage(base, "resources/robot_weak_walk0000.png");
+        test_enemy = getImage(base, "resources/robot_weak/robot_weak_walk0000.png");
         
     }
     
@@ -120,6 +119,9 @@ public class Main extends Applet implements Runnable, KeyListener {
     // the thread.
     @Override
     public void start() {
+    	
+    	// Initialize Environment values for the demo level
+    	new Environment("demo");
         
         // Creates Bird object and assigns him to the top-left
         // corner of the screen (0, 0). The coordinate system
@@ -127,8 +129,7 @@ public class Main extends Applet implements Runnable, KeyListener {
         bg1 = new Background(0, 0);
         bg2 = new Background(900, 0);
         bird = new Bird(0, 0, 61, 44);
-        enemies = new ArrayList<Enemy>();						//  CCT: make arrayList for all enemies
-        enemies.add(new Robot_weak(450, 550, 30, 30, 300, 600)); // CCT: add enemy instantiations here, for now they will all be represented by weak_robots image
+
         // TODO Tile initialization
         //try {
         //	loadMap("resources/map1.txt");
@@ -186,8 +187,8 @@ public class Main extends Applet implements Runnable, KeyListener {
             while (true) {
                 bird.update();
                 
-                for(int i=0; i<enemies.size(); i++){		// CCT
-                	enemies.get(i).update();				// CCT: update all enemies
+                for(int i=0; i<Environment.ENEMIES.size(); i++){		// CCT
+                	Environment.ENEMIES.get(i).update();				// CCT: update all enemies
                 }
                 
                 if (bird.isMovingRight() && !bird.isGliding()){
@@ -257,8 +258,8 @@ public class Main extends Applet implements Runnable, KeyListener {
             g.drawImage(bg, bg1.getBgX(), bg1.getBgY(), this);
             g.drawImage(bg, bg2.getBgX(), bg2.getBgY(), this);
             
-            for(int i=0; i<enemies.size(); i++){														// CCT: 
-            	g.drawImage(test_enemy, (int)enemies.get(i).getX(), (int)enemies.get(i).getY(), this);	// CCT: draw all enemies
+            for(int i=0; i<Environment.ENEMIES.size(); i++){														
+            	g.drawImage(test_enemy, (int)Environment.ENEMIES.get(i).getX(), (int)Environment.ENEMIES.get(i).getY(), this);	
             }
             
             g.drawImage(currentSprite, (int)bird.getX(), (int)bird.getY(), this);

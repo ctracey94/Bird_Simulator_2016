@@ -23,7 +23,7 @@ public class Enemy extends Entity{
 	// protected movement variables
 	// **domainX and domainY refer to the domain within which the enemy can move
 	protected float rightDomainX, leftDomainX;
-	protected float speedLvl = 5;
+	protected float speedLvl = 3;
 	protected float speed;
 	protected float realSpeed = speed;
 	protected boolean facingRight = true;
@@ -54,45 +54,62 @@ public class Enemy extends Entity{
     
     public void update(){
     	
-    	// update position based on velocity
+
+    	
     	super.update_position();
     	
-    	rect.setBounds((int)this.positionX, (int)this.positionY, 70, 50);
-    	
-    	float bgSpeed = bg.getSpeedX();
-    	
-    	// update domain positions
-    	rightDomainX += bgSpeed;
-    	leftDomainX += bgSpeed;
-    	
-    	// keep enemy within movement domain
-    	if(this.positionX > rightDomainX && alive){
-    		facingRight = false;
-    		this.positionX = rightDomainX;
+    	if (alive){
+	    	// update position based on velocity
+	    	
+        	this.velocityX = realSpeed;
+	    	rect.setBounds((int)this.positionX, (int)this.positionY, 70, 50);
+	    	
+	    	float bgSpeed = bg.getSpeedX();
+	    	
+	    	// update domain positions
+	    	rightDomainX += bgSpeed;
+	    	leftDomainX += bgSpeed;
+	    	
+	    	// keep enemy within movement domain
+	    	if(this.positionX > rightDomainX && alive){
+	    		facingRight = false;
+	    		this.positionX = rightDomainX;
+	    	}
+	    	else if(this.positionX < leftDomainX  && alive){
+	    		facingRight = true;
+	    		this.positionX = leftDomainX;
+	    	}
+	    	
+	    	if(facingRight){
+	    		speed = speedLvl;
+	    		realSpeed = speed +bgSpeed;
+	    	} else {
+	    		speed = -speedLvl;
+	    		realSpeed = speed + bgSpeed;
+	    	}
+	    	
+	    	if(rect.intersects(Bird.headFeet) && bird.isAlive()){
+	    		checkVerticalCollision(Bird.rectBottom);
+	    		checkSideCollision(Bird.rectLeft, Bird.rectRight);
+	    	}
     	}
-    	else if(this.positionX < leftDomainX  && alive){
-    		facingRight = true;
-    		this.positionX = leftDomainX;
-    	}
-    	
-    	if(facingRight){
-    		speed = speedLvl;
-    		realSpeed = speed +bgSpeed;
-    	} else {
-    		speed = -speedLvl;
-    		realSpeed = speed + bgSpeed;
-    	}
-    	
-    	if(rect.intersects(Bird.headFeet) && bird.isAlive()){
-    		checkVerticalCollision(Bird.rectBottom);
-    		checkSideCollision(Bird.rectLeft, Bird.rectRight);
-    	}
-    	
-    	if(!alive){
+	    	
+	    	
+    	if (!alive && this.positionY < 900){
     		this.velocityY += 1;
+    	} else if (!alive && this.positionY >= 900){
+    		this.positionX = -50;
+    		this.positionY = -50;
+    		this.velocityY = 0;
+    		this.velocityX = 0;
+    		speedLvl = 0;
+    		alive = true;
+    		
     	}
     	
-    	this.velocityX = realSpeed;
+    	
+    	
+    	
  
     }
     
@@ -109,7 +126,7 @@ public class Enemy extends Entity{
     public void kill(){
 		bird.setJumped(false);
 		bird.setJumps(0);
-		bird.setSpeedY(-7);
+		bird.setSpeedY(-10);
     	this.alive = false;
     	this.velocityY = -8;
 		this.setMovePastEdges(true);

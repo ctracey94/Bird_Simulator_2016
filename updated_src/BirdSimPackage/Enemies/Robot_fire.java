@@ -1,5 +1,7 @@
 package BirdSimPackage.Enemies;
 
+import BirdSimPackage.Main;
+
 /*
  * Robot_fire.java
  *
@@ -13,9 +15,11 @@ import BirdSimPackage.Enemies.Enemy;
 
 public class Robot_fire extends Enemy{
 	
+
+	
     // Constructor for Robot_weak class (calls Entity constructor)
     public Robot_fire(float x, float y, int width, int height, float dX, float dY){
-        super(x,y,width,height, dX, dY);
+        super(x,y,width,height, dX, dY, 2);
     }
 
 }

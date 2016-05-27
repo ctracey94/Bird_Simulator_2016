@@ -15,7 +15,7 @@ public class Robot_weak extends Enemy{
 	
     // Constructor for Robot_weak class (calls Entity constructor)
     public Robot_weak(float x, float y, int width, int height, float dX, float dY){
-        super(x,y,width,height, dX, dY);
+        super(x,y,width,height, dX, dY, 0);
     }
 
 }

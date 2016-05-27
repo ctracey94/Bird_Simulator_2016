@@ -1,16 +1,5 @@
 package BirdSimPackage;
 
-/*
- * Entity.java
- *
- * Authors:	Conor Tracey, Jacob Brown
- *
- * This class is a superclass for all creatures (pc and npc), as well as
- * objects that the pc will interact with (obstacles, environment, etc)
- * This class is intended to capture all the basic variables and methods
- * that all in-game entities will need (such as coordinates, hitbox, etc)
- */
-
 import BirdSimPackage.Environment;
 
 public class Entity {
@@ -21,8 +10,7 @@ public class Entity {
     protected float positionX, positionY;
     protected float velocityX, velocityY;
     protected int width, height;
-    
-    protected boolean alive = true;
+    public boolean movePastEdges = false;
     
     // Constructor
     protected Entity(float x, float y, int width, int height){
@@ -38,20 +26,22 @@ public class Entity {
         this.positionY += this.velocityY;
         
         // collision logic for floor of game environment
-        if ((this.positionY >= Environment.FLOOR - this.height) && alive){
+        if (this.positionY >= Environment.FLOOR - this.height && !movePastEdges){
             this.velocityY = 0;
             this.positionY = Environment.FLOOR - this.height;
         }
         
-        // collision logic for right & left edges of game
-        if (this.positionX >= Environment.RIGHT_EDGE - this.width){
-            this.velocityX = 0;
-            this.positionX = Environment.RIGHT_EDGE - this.width;
-        }
-        
-        if (this.positionX < Environment.LEFT_EDGE){
-            this.velocityX = 0;
-            this.positionX = Environment.LEFT_EDGE;
+        if (!movePastEdges){
+	        // collision logic for right & left edges of game
+	        if (this.positionX >= Environment.RIGHT_EDGE - this.width){
+	            this.velocityX = 0;
+	            this.positionX = Environment.RIGHT_EDGE - this.width;
+	        }
+	        
+	        if (this.positionX < Environment.LEFT_EDGE){
+	            this.velocityX = 0;
+	            this.positionX = Environment.LEFT_EDGE;
+	        }
         }
         
         
@@ -86,7 +76,7 @@ public class Entity {
     // A method for determining if an Entity is on the ground
     protected boolean isOnGround(){
         if (this.positionY >= Environment.FLOOR - this.height){
-            return true;
+           return true;
         }
         return false;
     }
@@ -101,11 +91,9 @@ public class Entity {
         return this.positionY;
     }
     
-    // A method to kill an Entity
-    public void kill(){
-    	alive = false;
+    public void setMovePastEdges(boolean b){
+    	movePastEdges = b;
     }
-    
     
     
 }

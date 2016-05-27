@@ -40,5 +40,8 @@ public class Background {
 
 		if (bgX <= -900) 
 			bgX += 1800;
+		
+		if (bgX >= 900)
+			bgX += -1800;
 	}
 }

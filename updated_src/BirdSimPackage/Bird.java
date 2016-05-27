@@ -1,13 +1,6 @@
 package BirdSimPackage;
 
-/*
- * Bird.java
- *
- * Authors Jacob Brown, Conor Tracey
- *
- * This class is a subclass of the Entity class. It defines the pc
- * (or "player character") of Bird Simulator 2016, who is in fact a bird.
- */
+import java.awt.Rectangle;
 
 import BirdSimPackage.Entity;
 
@@ -27,7 +20,16 @@ public class Bird extends Entity{
     private boolean glided = false;
     private boolean diveBombing = false;
     private boolean facingRight = true;
+    private boolean isFalling = false;
+    private boolean onGround = false;
     private MovStateX movStateX = MovStateX.Static;
+    private boolean alive = true;
+    
+    public static Rectangle rectLeft = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rectTop = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rectRight = new Rectangle(0, 0, 0, 0);
+    public static Rectangle rectBottom = new Rectangle(0, 0, 0, 0);
+    public static Rectangle headFeet = new Rectangle(0, 0, 0, 0);
     
     private static Background bg1 = Main.getBg1();
     private static Background bg2 = Main.getBg2();
@@ -43,7 +45,7 @@ public class Bird extends Entity{
         
         // If the bird is on the ground, reset jumped boolean
         // If the bird is gliding, nullify x velocity
-        if(isOnGround()){
+        if(isOnGround() || onGround){
         	
         	//if the bird was gliding, end his glide
         	if(gliding || glided){
@@ -83,16 +85,41 @@ public class Bird extends Entity{
         	this.velocityY += Environment.GRAVITY*4;
         }
         
+        
         // Background Scrolling Information
-        if (super.velocityX == 0 || super.velocityX < 0){
+        if (alive){
+	        if (super.velocityX == 0 || super.velocityX < 0){
+	        	bg1.setSpeedX(0);
+	        	bg2.setSpeedX(0);
+	        }
+	        
+	        if (super.velocityX > 0 && super.positionX > 250){
+	        	bg1.setSpeedX((int)-super.velocityX);
+	        	bg2.setSpeedX((int)-super.velocityX);
+	        	super.positionX = 250;
+	        } else if (super.velocityX < 0 && super.positionX <= 200){
+	        	bg1.setSpeedX((int)-super.velocityX);
+	        	bg2.setSpeedX((int)-super.velocityX);
+	        	super.positionX = 200;
+	        }
+        } else {
         	bg1.setSpeedX(0);
         	bg2.setSpeedX(0);
         }
         
-        if (super.velocityX > 0 && super.positionX > 200){
-        	bg1.setSpeedX((int)-super.velocityX);
-        	bg2.setSpeedX((int)-super.velocityX);
+        if (jumped && super.velocityY > 0.4f){
+        	isFalling = true;
+        } else {
+        	isFalling = false;
         }
+        
+        // Rectangle Information
+        rectLeft.setRect(super.positionX + 16, super.positionY + 20, 8, 14);
+        rectTop.setRect(super.positionX + 27, super.positionY + 12, 14, 8);
+        rectRight.setRect(super.positionX + 42, super.positionY + 20, 8, 14);
+        rectBottom.setRect(super.positionX + 27, super.positionY + 38, 14, 8);
+        headFeet.setRect(super.positionX + 0, super.positionY + 0, 61, 44);
+
         
     }
     
@@ -134,6 +161,7 @@ public class Bird extends Entity{
         	jumps ++;
             jumped = true;
             gliding = false;
+            onGround = false;
         	
             this.velocityY = jumpStrength;
 
@@ -209,4 +237,64 @@ public class Bird extends Entity{
     public void setFacingRight(boolean b){
     	facingRight = b;
     }
+    
+    public boolean isFalling(){
+    	return isFalling;
+    }
+    
+    public boolean isJumped(){
+    	return jumped;
+    }
+    
+    public boolean isDivebomb(){
+    	return diveBombing;
+    }
+    
+    public void setJumped(boolean jumped){
+    	this.jumped = jumped;
+    }
+    
+    public void setSpeedY(float speedY){
+    	super.velocityY = speedY;
+    }
+    
+    public void setSpeedX(float speedX){
+    	super.velocityX = speedX;
+    }
+    
+    public float getSpeedY(){
+    	return super.velocityY;
+    }
+    
+    public void setCenterX(float centerX){
+    	super.positionX = centerX;
+    }
+    
+    public void setCenterY(float centerY){
+    	super.positionY = centerY;
+    }
+    
+    public void setOnGround(boolean onGround){
+    	this.onGround = onGround;
+    }
+    
+    public void kill(){
+    	alive = false;
+    	this.velocityY = -8;
+    	jumped = true;
+    	jumps = 2;
+    	gliding = false;
+    	this.movePastEdges = true;
+    }
+    
+    public boolean isAlive(){
+    	return alive;
+    }
+    
+    public void setJumps(int njumps){
+    	if(njumps >= 0 && njumps <= 2){
+        	jumps = njumps;
+    	}
+    }
+    
 }

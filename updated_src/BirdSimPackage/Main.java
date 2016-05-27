@@ -19,14 +19,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
-// BirdSimPackage local imports
+import BirdSimPackage.Background;
 import BirdSimPackage.Bird;
 import BirdSimPackage.Environment;
-import BirdSimPackage.Background;
 import BirdSimPackage.Enemies.Enemy;
-import BirdSimPackage.Enemies.Robot_weak;
-import BirdSimPackage.Enemies.Robot_helmet;
 import BirdSimPackage.Enemies.Robot_fire;
+import BirdSimPackage.Enemies.Robot_helmet;
+import BirdSimPackage.Enemies.Robot_weak;
 
 public class Main extends Applet implements Runnable, KeyListener {
     
@@ -42,12 +41,29 @@ public class Main extends Applet implements Runnable, KeyListener {
     // Declares a Bird object (main character) and
     // and a picture to go along with that object
     private static Bird bird;
-    private Image image, bg, test_enemy, currentSprite;
+    private static Robot_fire robotFire;
+    private static Robot_helmet robotHelmet;
+    private static Robot_weak robotWeak;
+    private static ArrayList<Enemy> enemies;
+    private Image image, bg, currentSprite;
     private Image bird_stand_right, bird_walk_right_1, bird_walk_right_2;
     private Image bird_stand_left, bird_walk_left_1, bird_walk_left_2;
     private Image bird_glide_left_1, bird_glide_left_2, bird_glide_right_1, bird_glide_right_2;
-    private Animation birdWalkRight, birdWalkLeft, birdGlideRight, birdGlideLeft;
+    private Image bird_jump_right_1, bird_jump_right_2, bird_jump_left_1, bird_jump_left_2;
+    private Image bird_divebomb_right_1, bird_divebomb_right_2, bird_divebomb_right_3;
+    private Image bird_divebomb_left_1, bird_divebomb_left_2, bird_divebomb_left_3;
+    private Image robot_fire_walk_left_1, robot_fire_walk_left_2, robot_fire_walk_left_3, robot_fire_walk_left_4, robot_fire_walk_left_5, robot_fire_walk_left_6, robot_fire_walk_left_7, robot_fire_walk_left_8, robot_fire_walk_left_9, robot_fire_walk_left_10, robot_fire_walk_left_11, robot_fire_walk_left_12, robot_fire_walk_left_13, robot_fire_walk_left_14, robot_fire_walk_left_15, robot_fire_walk_left_16;
+    private Image robot_fire_walk_right_1, robot_fire_walk_right_2, robot_fire_walk_right_3, robot_fire_walk_right_4, robot_fire_walk_right_5, robot_fire_walk_right_6, robot_fire_walk_right_7, robot_fire_walk_right_8, robot_fire_walk_right_9, robot_fire_walk_right_10, robot_fire_walk_right_11, robot_fire_walk_right_12, robot_fire_walk_right_13, robot_fire_walk_right_14, robot_fire_walk_right_15, robot_fire_walk_right_16;
+    private Image robot_helmet_walk_left_1, robot_helmet_walk_left_2, robot_helmet_walk_left_3, robot_helmet_walk_left_4, robot_helmet_walk_left_5, robot_helmet_walk_left_6, robot_helmet_walk_left_7, robot_helmet_walk_left_8, robot_helmet_walk_left_9, robot_helmet_walk_left_10, robot_helmet_walk_left_11, robot_helmet_walk_left_12, robot_helmet_walk_left_13, robot_helmet_walk_left_14, robot_helmet_walk_left_15, robot_helmet_walk_left_16;
+    private Image robot_helmet_walk_right_1, robot_helmet_walk_right_2, robot_helmet_walk_right_3, robot_helmet_walk_right_4, robot_helmet_walk_right_5, robot_helmet_walk_right_6, robot_helmet_walk_right_7, robot_helmet_walk_right_8, robot_helmet_walk_right_9, robot_helmet_walk_right_10, robot_helmet_walk_right_11, robot_helmet_walk_right_12, robot_helmet_walk_right_13, robot_helmet_walk_right_14, robot_helmet_walk_right_15, robot_helmet_walk_right_16;
+    private Animation birdWalkRight, birdWalkLeft, birdGlideRight, birdGlideLeft, birdDivebombRight, birdDivebombLeft, robotFireWalkLeft, robotFireWalkRight, robotHelmetWalkLeft, robotHelmetWalkRight;
     private static Background bg1, bg2;
+    
+    private long startTime = System.currentTimeMillis();
+    private Font font = new Font("Courier", Font.BOLD, 30);
+    
+    public static Image tile01, tile02, tile03, tile04;
+    private ArrayList<Tile> tilearray = new ArrayList<Tile>();
     
     private Graphics graphics;
     
@@ -80,38 +96,7 @@ public class Main extends Applet implements Runnable, KeyListener {
         // Any assets would be setup here (sprites, backgrounds, etc)
         // At some point, I think it would be a good idea to create
         // an Asset Initializer class that does this work for us.
-
-        bird_stand_right = getImage(base, "resources/bird/walkcycle/bird_walk_right_2.png");
-        bird_walk_right_1 = getImage(base, "resources/bird/walkcycle/bird_walk_right_1.png");
-        bird_walk_right_2 = getImage(base, "resources/bird/walkcycle/bird_walk_right_2.png");
-        bird_stand_left = getImage(base, "resources/bird/walkcycle/bird_walk_left_2.png");
-        bird_walk_left_1 = getImage(base, "resources/bird/walkcycle/bird_walk_left_1.png");
-        bird_walk_left_2 = getImage(base, "resources/bird/walkcycle/bird_walk_left_2.png");
-        
-        bird_glide_left_1 = getImage(base, "resources/bird/glide/bird_glide_left_1.png");
-        bird_glide_left_2 = getImage(base, "resources/bird/glide/bird_glide_left_2.png");
-        bird_glide_right_1 = getImage(base, "resources/bird/glide/bird_glide_right_1.png");
-        bird_glide_right_2 = getImage(base, "resources/bird/glide/bird_glide_right_2.png");
-        
-        birdWalkRight = new Animation();
-        birdWalkRight.addFrame(bird_walk_right_1, 50);
-        birdWalkRight.addFrame(bird_walk_right_2, 50);
-        
-        birdWalkLeft = new Animation();
-        birdWalkLeft.addFrame(bird_walk_left_1, 50);
-        birdWalkLeft.addFrame(bird_walk_left_2, 50);
-        
-        birdGlideRight = new Animation();
-        birdGlideRight.addFrame(bird_glide_right_1, 50);
-        birdGlideRight.addFrame(bird_glide_right_2, 50);
-        
-        birdGlideLeft = new Animation();
-        birdGlideLeft.addFrame(bird_glide_left_1, 50);
-        birdGlideLeft.addFrame(bird_glide_left_2, 50);
-        
-        currentSprite = bird_stand_right;
-        bg = getImage(base, "resources/background.png");
-        test_enemy = getImage(base, "resources/robot_weak/robot_weak_walk0000.png");
+        loadAssets();
         
     }
     
@@ -119,62 +104,99 @@ public class Main extends Applet implements Runnable, KeyListener {
     // the thread.
     @Override
     public void start() {
-    	
-    	// Initialize Environment values for the demo level
-    	new Environment("demo");
         
         // Creates Bird object and assigns him to the top-left
         // corner of the screen (0, 0). The coordinate system
         // starts up there. His width and height are set to 32.
         bg1 = new Background(0, 0);
         bg2 = new Background(900, 0);
-        bird = new Bird(0, 0, 61, 44);
-
-        // TODO Tile initialization
-        //try {
-        //	loadMap("resources/map1.txt");
-        //} catch (IOException e) {
-        // TODO Auto-generated catch block
-        //	e.printStackTrace();
-        //}
+        bird = new Bird(225, 50, 61, 44);
+        
+        //robotFire = new Robot_fire(300, 520, 50, 50, 0, 650);
+        //robotHelmet = new Robot_helmet(575, 280, 50, 50, 470, 620);
+        
+       // enemies = new ArrayList<Enemy>();						//  CCT: make arrayList for all enemies
+       // enemies.add(new Robot_fire(300, 520, 50, 50, 0, 650)); // CCT: add enemy instantiations here, for now they will all be represented by weak_robots image
+       // enemies.add(robotHelmet = new Robot_helmet(575, 280, 50, 50, 470, 620));
+        
+        try {
+        	loadMap("resources/map.txt");
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
         
         Thread thread = new Thread(this);
         thread.start();
     }
     
+
     // Load map function for the tiles
     private void loadMap(String filename) throws IOException {
-         // not sure of format of intended txt input file
-        int[][] tileMap = new int[20][30]; // int[row][col] are changable
-        
-        String line = " ";
-        int row_counter = 0;
-        try {
-            FileReader fr = new FileReader(filename);
-            BufferedReader bf = new BufferedReader(fr);
-            
-            while((line = bf.readLine()) != null) {
-                String[] vals = line.trim().split("\\s+");
-
-                for (int i = 0; i < 30; i++ )
-                    tileMap[row_counter][i] = Integer.parseInt(vals[i]);
-
-                row_counter++;
-            }
-            
-        }
-        catch(FileNotFoundException e) {e.printStackTrace();}
-        catch(IOException e) {e.printStackTrace();}
+    	ArrayList lines = new ArrayList();
+    	int width = 0;
+    	int height = 0;
+    	
+    	enemies = new ArrayList<Enemy>();
+    	
+    	BufferedReader reader = new BufferedReader(new FileReader(filename));
+    	while(true){
+    		String line = reader.readLine();
+    		
+    		if (line == null){
+    			reader.close();
+    			break;
+    		}
+    		
+    		if (!line.startsWith("~")){
+    			lines.add(line);
+    			width = Math.max(width, line.length());
+    		}
+    	}
+    	
+    	height = lines.size();
+    	
+    	for (int j = 0; j < 20; j++){
+    		String line = (String) lines.get(j);
+    		for (int i = 0; i < width; i++){
+    			if (i < line.length()){
+    				char ch = line.charAt(i);
+    				if (Character.getNumericValue(ch) == 9){
+    					// Create Fire Enemy
+    					enemies.add(new Robot_fire((float) ((i - 21) * 30) - 10, (float)((j * 30) - 20), 50, 50, ((i - 21) * 30) - 100, ((i - 21) * 30) + 100));
+    				} else if (Character.getNumericValue(ch) == 8) {
+    					// Create Helmet Enemy
+    					enemies.add( new Robot_helmet((float) ((i - 21) * 30) - 10, (float)((j * 30) - 20), 50, 50, ((i - 21) * 30) - 100, ((i - 21) * 30) + 100));
+    				} else if ((Character.getNumericValue(ch) == 7)){
+    					// Create Weak Enemy
+    					enemies.add(new Robot_helmet((float) ((i - 21) * 30) - 10, (float)((j * 30) - 20), 50, 50,((i - 21) * 30), ((i - 21) * 30)));
+    				} else {
+    					Tile t = new Tile(i, j, Character.getNumericValue(ch));
+    					tilearray.add(t);
+    				}
+    			}
+    		}
+    	}
+    	
+    	height = lines.size();
+    	
+    	for (int j = 0; j < 20; j++){
+    		String line = (String) lines.get(j);
+    		for (int i = 0; i < width; i++){
+    			if (i < line.length()){
+    				char ch = line.charAt(i);
+    				Tile t = new Tile(i, j, Character.getNumericValue(ch));
+    				tilearray.add(t);
+    			}
+    		}
+    	}
     }
     
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
     }
     
     @Override
     public void destroy() {
-        // TODO Auto-generated method stub
     }
     
     // This is the game loop - as the GameState is set to
@@ -187,9 +209,6 @@ public class Main extends Applet implements Runnable, KeyListener {
             while (true) {
                 bird.update();
                 
-                for(int i=0; i<Environment.ENEMIES.size(); i++){		// CCT
-                	Environment.ENEMIES.get(i).update();				// CCT: update all enemies
-                }
                 
                 if (bird.isMovingRight() && !bird.isGliding()){
                 	currentSprite = birdWalkRight.getImage();
@@ -205,8 +224,29 @@ public class Main extends Applet implements Runnable, KeyListener {
                 	currentSprite = bird_stand_left;
                 }
                 
+                if(bird.isJumped() && !bird.isFalling() && bird.isFacingRight() && !bird.isGliding()){
+                	currentSprite = bird_jump_right_1;
+                } else if (bird.isJumped() && bird.isFalling() && bird.isFacingRight() && !bird.isGliding()){
+                	currentSprite = bird_jump_right_2;
+                } else if (bird.isJumped() && !bird.isFalling() && !bird.isFacingRight() && !bird.isGliding()){
+                	currentSprite = bird_jump_left_1;
+                } else if (bird.isJumped() && bird.isFalling() && !bird.isFacingRight() && !bird.isGliding()){
+                	currentSprite = bird_jump_left_2;
+                }
+                
+                if (bird.isDivebomb() && bird.isFacingRight()){
+                	currentSprite = birdDivebombRight.getImage();
+                } else if (bird.isDivebomb() && !bird.isFacingRight()){
+                	currentSprite = birdDivebombLeft.getImage();
+                }
+                updateTiles();
+                
                 bg1.update();
                 bg2.update();
+                
+                for(int i=0; i<enemies.size();i++){
+                	enemies.get(i).update();
+                }
 
                 animate();
                 repaint();
@@ -225,7 +265,12 @@ public class Main extends Applet implements Runnable, KeyListener {
         birdWalkLeft.update(17);
         birdGlideRight.update(20);
         birdGlideLeft.update(20);
-        //System.out.println(birdWalkRight.curFrame());
+        birdDivebombRight.update(20);
+        birdDivebombLeft.update(20);
+        robotFireWalkLeft.update(3);
+        robotFireWalkRight.update(3);
+        robotHelmetWalkLeft.update(3);
+        robotHelmetWalkRight.update(3);
     }
     
     // Update function - ignore the image/g.drawImage stuff for now.
@@ -257,17 +302,61 @@ public class Main extends Applet implements Runnable, KeyListener {
             // Y coordinates.
             g.drawImage(bg, bg1.getBgX(), bg1.getBgY(), this);
             g.drawImage(bg, bg2.getBgX(), bg2.getBgY(), this);
+            paintTiles(g);
             
-            for(int i=0; i<Environment.ENEMIES.size(); i++){														
-            	g.drawImage(test_enemy, (int)Environment.ENEMIES.get(i).getX(), (int)Environment.ENEMIES.get(i).getY(), this);	
-            }
+   //         for(int i=0; i<enemies.size(); i++){														// CCT: 
+   //         	g.drawImage(test_enemy, (int)enemies.get(i).getX(), (int)enemies.get(i).getY(), this);	// CCT: draw all enemies
+   //         }
             
             g.drawImage(currentSprite, (int)bird.getX(), (int)bird.getY(), this);
             
+            for(int i=0; i<enemies.size(); i++){
+            	Enemy enemy = enemies.get(i);
+            	
+            	if(enemy.getType() == 0){
+            		//do nothing for now
+            	} else if (enemy.getType() == 1){
+            		 if (enemy.getFacingRight()){
+                     	g.drawImage(robotHelmetWalkRight.getImage(), (int)enemy.getX(), (int)enemy.getY(), this);
+                     } else {
+                     	g.drawImage(robotHelmetWalkLeft.getImage(), (int)enemy.getX(), (int)enemy.getY(), this);
+                     }
+            	} else if (enemy.getType() == 2){
+            		if (enemy.getFacingRight()){
+                    	g.drawImage(robotFireWalkRight.getImage(), (int)enemy.getX(), (int)enemy.getY(), this);
+                    } else {
+                    	g.drawImage(robotFireWalkLeft.getImage(), (int)enemy.getX(), (int)enemy.getY(), this);
+                    }
+            	}
+            }
+            
+            
+           
+            
+            int elapsedSecs = (int)(System.currentTimeMillis() - startTime)/1000;
+            g.setColor(Color.BLUE);
+            g.setFont(font);
+            g.drawString(String.valueOf(elapsedSecs) + " / 300", 723, 27);
+            g.setColor(Color.WHITE);
+            g.drawString(String.valueOf(elapsedSecs) + " / 300", 725, 25);
         } else if (state == GameState.Dead) {
             g.setColor(Color.BLUE);
             g.fillRect(0, 0, 900, 600);
         }
+    }
+    
+    private void updateTiles(){
+    	for (int i = 0; i < tilearray.size(); i++){
+    		Tile t = (Tile) tilearray.get(i);
+    		t.update();
+    	}
+    }
+    
+    private void paintTiles(Graphics g){
+    	for (int i = 0; i < tilearray.size(); i++){
+    		Tile t = (Tile) tilearray.get(i);
+    		g.drawImage(t.getTileImage(), t.getTileX(), t.getTileY(), this);
+    	}
     }
     
     // keyPressed checks to see if any of these are pressed and acts
@@ -348,12 +437,217 @@ public class Main extends Applet implements Runnable, KeyListener {
         // TODO Auto-generated method stub
     }
     
+    public void loadAssets(){
+    	bird_stand_right = getImage(base, "resources/bird/walk_cycle/bird_walk_right_2.png");
+        bird_walk_right_1 = getImage(base, "resources/bird/walk_cycle/bird_walk_right_1.png");
+        bird_walk_right_2 = getImage(base, "resources/bird/walk_cycle/bird_walk_right_2.png");
+        bird_stand_left = getImage(base, "resources/bird/walk_cycle/bird_walk_left_2.png");
+        bird_walk_left_1 = getImage(base, "resources/bird/walk_cycle/bird_walk_left_1.png");
+        bird_walk_left_2 = getImage(base, "resources/bird/walk_cycle/bird_walk_left_2.png");
+        
+        bird_glide_left_1 = getImage(base, "resources/bird/glide/bird_glide_left_1.png");
+        bird_glide_left_2 = getImage(base, "resources/bird/glide/bird_glide_left_2.png");
+        bird_glide_right_1 = getImage(base, "resources/bird/glide/bird_glide_right_1.png");
+        bird_glide_right_2 = getImage(base, "resources/bird/glide/bird_glide_right_2.png");
+        
+        bird_jump_right_1 = getImage(base, "resources/bird/jump/bird_jump_right_1.png");
+        bird_jump_right_2 = getImage(base, "resources/bird/jump/bird_jump_right_2.png");
+        bird_jump_left_1 = getImage(base, "resources/bird/jump/bird_jump_left_1.png");
+        bird_jump_left_2 = getImage(base, "resources/bird/jump/bird_jump_left_2.png");
+        
+        bird_divebomb_right_1 = getImage(base, "resources/bird/divebomb/bird_divebomb_right_1.png");
+        bird_divebomb_right_2 = getImage(base, "resources/bird/divebomb/bird_divebomb_right_2.png");
+        bird_divebomb_right_3 = getImage(base, "resources/bird/divebomb/bird_divebomb_right_3.png");
+        bird_divebomb_left_1 = getImage(base, "resources/bird/divebomb/bird_divebomb_left_1.png");
+        bird_divebomb_left_2 = getImage(base, "resources/bird/divebomb/bird_divebomb_left_2.png");
+        bird_divebomb_left_3 = getImage(base, "resources/bird/divebomb/bird_divebomb_left_3.png");
+        
+        robot_fire_walk_left_1 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_01.png");
+        robot_fire_walk_left_2 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_02.png");
+        robot_fire_walk_left_3 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_03.png");
+        robot_fire_walk_left_4 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_04.png");
+        robot_fire_walk_left_5 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_05.png");
+        robot_fire_walk_left_6 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_06.png");
+        robot_fire_walk_left_7 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_07.png");
+        robot_fire_walk_left_8 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_08.png");
+        robot_fire_walk_left_9 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_09.png");
+        robot_fire_walk_left_10 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_10.png");
+        robot_fire_walk_left_11 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_11.png");
+        robot_fire_walk_left_12 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_12.png");
+        robot_fire_walk_left_13 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_13.png");
+        robot_fire_walk_left_14 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_14.png");
+        robot_fire_walk_left_15 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_15.png");
+        robot_fire_walk_left_16 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_left_16.png");
+        
+        robot_fire_walk_right_1 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_01.png");
+        robot_fire_walk_right_2 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_02.png");
+        robot_fire_walk_right_3 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_03.png");
+        robot_fire_walk_right_4 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_04.png");
+        robot_fire_walk_right_5 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_05.png");
+        robot_fire_walk_right_6 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_06.png");
+        robot_fire_walk_right_7 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_07.png");
+        robot_fire_walk_right_8 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_08.png");
+        robot_fire_walk_right_9 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_09.png");
+        robot_fire_walk_right_10 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_10.png");
+        robot_fire_walk_right_11 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_11.png");
+        robot_fire_walk_right_12 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_12.png");
+        robot_fire_walk_right_13 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_13.png");
+        robot_fire_walk_right_14 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_14.png");
+        robot_fire_walk_right_15 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_15.png");
+        robot_fire_walk_right_16 = getImage(base, "resources/robot/fire/walk_cycle/robot_fire_walk_right_16.png");
+        
+        robot_helmet_walk_right_1 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_01.png");
+        robot_helmet_walk_right_2 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_02.png");
+        robot_helmet_walk_right_3 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_03.png");
+        robot_helmet_walk_right_4 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_04.png");
+        robot_helmet_walk_right_5 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_05.png");
+        robot_helmet_walk_right_6 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_06.png");
+        robot_helmet_walk_right_7 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_07.png");
+        robot_helmet_walk_right_8 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_08.png");
+        robot_helmet_walk_right_9 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_09.png");
+        robot_helmet_walk_right_10 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_10.png");
+        robot_helmet_walk_right_11 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_11.png");
+        robot_helmet_walk_right_12 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_12.png");
+        robot_helmet_walk_right_13 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_13.png");
+        robot_helmet_walk_right_14 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_14.png");
+        robot_helmet_walk_right_15 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_15.png");
+        robot_helmet_walk_right_16 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_right_16.png");
+        
+        robot_helmet_walk_left_1 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_01.png");
+        robot_helmet_walk_left_2 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_02.png");
+        robot_helmet_walk_left_3 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_03.png");
+        robot_helmet_walk_left_4 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_04.png");
+        robot_helmet_walk_left_5 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_05.png");
+        robot_helmet_walk_left_6 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_06.png");
+        robot_helmet_walk_left_7 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_07.png");
+        robot_helmet_walk_left_8 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_08.png");
+        robot_helmet_walk_left_9 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_09.png");
+        robot_helmet_walk_left_10 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_10.png");
+        robot_helmet_walk_left_11 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_11.png");
+        robot_helmet_walk_left_12 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_12.png");
+        robot_helmet_walk_left_13 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_13.png");
+        robot_helmet_walk_left_14 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_14.png");
+        robot_helmet_walk_left_15 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_15.png");
+        robot_helmet_walk_left_16 = getImage(base, "resources/robot/helmet/walk_cycle/robot_helmet_walk_left_16.png");
+        
+        birdWalkRight = new Animation();
+        birdWalkRight.addFrame(bird_walk_right_1, 50);
+        birdWalkRight.addFrame(bird_walk_right_2, 50);
+        
+        birdWalkLeft = new Animation();
+        birdWalkLeft.addFrame(bird_walk_left_1, 50);
+        birdWalkLeft.addFrame(bird_walk_left_2, 50);
+        
+        birdGlideRight = new Animation();
+        birdGlideRight.addFrame(bird_glide_right_1, 50);
+        birdGlideRight.addFrame(bird_glide_right_2, 50);
+        
+        birdGlideLeft = new Animation();
+        birdGlideLeft.addFrame(bird_glide_left_1, 50);
+        birdGlideLeft.addFrame(bird_glide_left_2, 50);
+        
+        birdDivebombRight = new Animation();
+        birdDivebombRight.addFrame(bird_divebomb_right_1, 10);
+        birdDivebombRight.addFrame(bird_divebomb_right_2, 10);
+        birdDivebombRight.addFrame(bird_divebomb_right_3, 10);
+        
+        birdDivebombLeft = new Animation();
+        birdDivebombLeft.addFrame(bird_divebomb_left_1, 10);
+        birdDivebombLeft.addFrame(bird_divebomb_left_2, 10);
+        birdDivebombLeft.addFrame(bird_divebomb_left_3, 10);
+        
+        robotFireWalkLeft = new Animation();
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_1, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_2, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_3, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_4, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_5, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_6, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_7, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_8, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_9, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_10, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_11, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_12, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_13, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_14, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_15, 10);
+        robotFireWalkLeft.addFrame(robot_fire_walk_left_16, 10);
+        
+        robotFireWalkRight = new Animation();
+        robotFireWalkRight.addFrame(robot_fire_walk_right_1, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_2, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_3, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_4, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_5, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_6, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_7, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_8, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_9, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_10, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_11, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_12, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_13, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_14, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_15, 10);
+        robotFireWalkRight.addFrame(robot_fire_walk_right_16, 10);
+        
+        robotHelmetWalkRight = new Animation();
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_1, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_2, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_3, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_4, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_5, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_6, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_7, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_8, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_9, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_10, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_11, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_12, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_13, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_14, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_15, 10);
+        robotHelmetWalkRight.addFrame(robot_helmet_walk_right_16, 10);
+        
+        robotHelmetWalkLeft = new Animation();
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_1, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_2, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_3, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_4, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_5, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_6, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_7, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_8, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_9, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_10, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_11, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_12, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_13, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_14, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_15, 10);
+        robotHelmetWalkLeft.addFrame(robot_helmet_walk_left_16, 10);
+        
+        currentSprite = bird_stand_right;
+        bg = getImage(base, "resources/background.png");
+        
+        tile01 = getImage(base, "resources/tile01.png");
+        tile02 = getImage(base, "resources/tile02.png");
+        tile03 = getImage(base, "resources/tile03.png");
+        tile04 = getImage(base, "resources/tile04.png");
+        
+    }
+    
     public static Background getBg1(){
     	return bg1;
     }
     
     public static Background getBg2(){
     	return bg2;
+    }
+    
+    public static Bird getBird(){
+    	return bird;
     }
     
 }

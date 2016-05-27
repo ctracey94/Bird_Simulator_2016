@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
+
 import BirdSimPackage.Background;
 import BirdSimPackage.Bird;
 import BirdSimPackage.Environment;
@@ -36,7 +38,7 @@ public class Main extends Applet implements Runnable, KeyListener {
     }
     
     // Automatically sets the state to Running
-    GameState state = GameState.Running;
+    GameState state = GameState.Title;
     
     // Declares a Bird object (main character) and
     // and a picture to go along with that object
@@ -61,6 +63,12 @@ public class Main extends Applet implements Runnable, KeyListener {
     
     private long startTime = System.currentTimeMillis();
     private Font font = new Font("Courier", Font.BOLD, 30);
+    private Font titleFont = new Font("Courier", Font.BOLD, 70);
+    private Font ridersFont = new Font("Courier", Font.ITALIC, 10);
+    private int flashInterval = 0;
+    private boolean flash = false;
+    private int GOInterval = 0;
+    private boolean playing = false;
     
     public static Image tile01, tile02, tile03, tile04;
     private ArrayList<Tile> tilearray = new ArrayList<Tile>();
@@ -111,13 +119,6 @@ public class Main extends Applet implements Runnable, KeyListener {
         bg1 = new Background(0, 0);
         bg2 = new Background(900, 0);
         bird = new Bird(225, 50, 61, 44);
-        
-        //robotFire = new Robot_fire(300, 520, 50, 50, 0, 650);
-        //robotHelmet = new Robot_helmet(575, 280, 50, 50, 470, 620);
-        
-       // enemies = new ArrayList<Enemy>();						//  CCT: make arrayList for all enemies
-       // enemies.add(new Robot_fire(300, 520, 50, 50, 0, 650)); // CCT: add enemy instantiations here, for now they will all be represented by weak_robots image
-       // enemies.add(robotHelmet = new Robot_helmet(575, 280, 50, 50, 470, 620));
         
         try {
         	loadMap("resources/map.txt");
@@ -203,61 +204,89 @@ public class Main extends Applet implements Runnable, KeyListener {
     // Running, it'll update the Bird object, animate anything,
     // and render/repaint the screen. The Thread.sleep(17) is
     // to steady the framerate
-    public void run() {
-        if (state == GameState.Running) {
-            
+    public void run() {  
             while (true) {
-                bird.update();
-                
-                
-                if (bird.isMovingRight() && !bird.isGliding()){
-                	currentSprite = birdWalkRight.getImage();
-                } else if (bird.isMovingLeft() && !bird.isGliding()){
-                	currentSprite = birdWalkLeft.getImage();
-                } else if (bird.isGliding() && bird.isFacingRight()){
-                	currentSprite = birdGlideRight.getImage();
-                } else if (bird.isGliding() && !bird.isFacingRight()){
-                	currentSprite = birdGlideLeft.getImage();
-                } else if (!bird.isGliding() && bird.isFacingRight()){
-                	currentSprite = bird_stand_right;
-                } else if (!bird.isGliding() && !bird.isFacingRight()){
-                	currentSprite = bird_stand_left;
-                }
-                
-                if(bird.isJumped() && !bird.isFalling() && bird.isFacingRight() && !bird.isGliding()){
-                	currentSprite = bird_jump_right_1;
-                } else if (bird.isJumped() && bird.isFalling() && bird.isFacingRight() && !bird.isGliding()){
-                	currentSprite = bird_jump_right_2;
-                } else if (bird.isJumped() && !bird.isFalling() && !bird.isFacingRight() && !bird.isGliding()){
-                	currentSprite = bird_jump_left_1;
-                } else if (bird.isJumped() && bird.isFalling() && !bird.isFacingRight() && !bird.isGliding()){
-                	currentSprite = bird_jump_left_2;
-                }
-                
-                if (bird.isDivebomb() && bird.isFacingRight()){
-                	currentSprite = birdDivebombRight.getImage();
-                } else if (bird.isDivebomb() && !bird.isFacingRight()){
-                	currentSprite = birdDivebombLeft.getImage();
-                }
-                updateTiles();
-                
-                bg1.update();
-                bg2.update();
-                
-                for(int i=0; i<enemies.size();i++){
-                	enemies.get(i).update();
-                }
-
-                animate();
-                repaint();
-                try {
-                    Thread.sleep(17);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            	while(state == GameState.Title){
+            		flashInterval ++;
+            		if(flashInterval >= 600000){
+            			flash = !flash;
+            			flashInterval = 0;
+            		}
+            		
+            		if(playing){
+            			state = GameState.Running;
+            		}
+            		
+            		repaint();
+            	}
+            	
+            	while(state == GameState.Dead){
+            		GOInterval++;
+            		if(GOInterval > 2000000){
+            			playing = false;
+            			state = GameState.Title;
+            			
+            		}
+            		
+            		repaint();
+            	}
+        	
+	        	while(state == GameState.Running){
+	                bird.update();
+	                
+	                if (bird.isMovingRight() && !bird.isGliding()){
+	                	currentSprite = birdWalkRight.getImage();
+	                } else if (bird.isMovingLeft() && !bird.isGliding()){
+	                	currentSprite = birdWalkLeft.getImage();
+	                } else if (bird.isGliding() && bird.isFacingRight()){
+	                	currentSprite = birdGlideRight.getImage();
+	                } else if (bird.isGliding() && !bird.isFacingRight()){
+	                	currentSprite = birdGlideLeft.getImage();
+	                } else if (!bird.isGliding() && bird.isFacingRight()){
+	                	currentSprite = bird_stand_right;
+	                } else if (!bird.isGliding() && !bird.isFacingRight()){
+	                	currentSprite = bird_stand_left;
+	                }
+	                
+	                if(bird.isJumped() && !bird.isFalling() && bird.isFacingRight() && !bird.isGliding()){
+	                	currentSprite = bird_jump_right_1;
+	                } else if (bird.isJumped() && bird.isFalling() && bird.isFacingRight() && !bird.isGliding()){
+	                	currentSprite = bird_jump_right_2;
+	                } else if (bird.isJumped() && !bird.isFalling() && !bird.isFacingRight() && !bird.isGliding()){
+	                	currentSprite = bird_jump_left_1;
+	                } else if (bird.isJumped() && bird.isFalling() && !bird.isFacingRight() && !bird.isGliding()){
+	                	currentSprite = bird_jump_left_2;
+	                }
+	                
+	                if (bird.isDivebomb() && bird.isFacingRight()){
+	                	currentSprite = birdDivebombRight.getImage();
+	                } else if (bird.isDivebomb() && !bird.isFacingRight()){
+	                	currentSprite = birdDivebombLeft.getImage();
+	                }
+	                
+	                if (bird.getY() > 900){
+	                	state = GameState.Dead;
+	                }
+	                updateTiles();
+	                
+	                bg1.update();
+	                bg2.update();
+	                
+	                for(int i=0; i<enemies.size();i++){
+	                	enemies.get(i).update();
+	                }
+	
+	                animate();
+	                repaint();
+	                try {
+	                    Thread.sleep(17);
+	                } catch (InterruptedException e) {
+	                    e.printStackTrace();
+	                }
+	        	}
+	        	
             }
         }
-    }
     
     // Used for animation
     public void animate() {
@@ -304,10 +333,6 @@ public class Main extends Applet implements Runnable, KeyListener {
             g.drawImage(bg, bg2.getBgX(), bg2.getBgY(), this);
             paintTiles(g);
             
-   //         for(int i=0; i<enemies.size(); i++){														// CCT: 
-   //         	g.drawImage(test_enemy, (int)enemies.get(i).getX(), (int)enemies.get(i).getY(), this);	// CCT: draw all enemies
-   //         }
-            
             g.drawImage(currentSprite, (int)bird.getX(), (int)bird.getY(), this);
             
             for(int i=0; i<enemies.size(); i++){
@@ -330,18 +355,36 @@ public class Main extends Applet implements Runnable, KeyListener {
             	}
             }
             
-            
-           
-            
             int elapsedSecs = (int)(System.currentTimeMillis() - startTime)/1000;
             g.setColor(Color.BLUE);
             g.setFont(font);
             g.drawString(String.valueOf(elapsedSecs) + " / 300", 723, 27);
             g.setColor(Color.WHITE);
             g.drawString(String.valueOf(elapsedSecs) + " / 300", 725, 25);
+            
         } else if (state == GameState.Dead) {
-            g.setColor(Color.BLUE);
+            g.setColor(Color.BLACK);
             g.fillRect(0, 0, 900, 600);
+            g.setColor(Color.RED);
+            g.drawString("GAME OVER", 350, 300);
+            
+            
+            
+        } else if (state == GameState.Title){
+        	g.setColor(Color.WHITE);
+        	g.fillRect(0,0,900,600);
+        	g.setColor(Color.BLUE);
+        	g.setFont(titleFont);
+        	g.drawString("BIRD SIMULATOR 2016", 50, 200);
+        	g.setFont(ridersFont);
+        	g.drawString("Made by the Riders: Jacob Brown, Conor Tracey, & Zhibin Zhang", 300, 230);
+        	
+       
+        	if(flash){
+            	g.setFont(font);
+            	g.drawString("PRESS SPACE TO PLAY", 300, 400 );
+        	}
+
         }
     }
     
@@ -398,6 +441,10 @@ public class Main extends Applet implements Runnable, KeyListener {
             	bird.glide();
             	System.out.println("Gliding");
                 break;
+                
+            case KeyEvent.VK_SPACE:
+            	playing = true;
+            	break;
                 
         }
         

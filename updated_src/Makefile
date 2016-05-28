@@ -5,7 +5,7 @@ prog: my.class
 	appletviewer BirdSimPackage.html
 
 my.class: BirdSimPackage
-	javac ./BirdSimPackage/*.java
+	javac ./BirdSimPackage/*.java ./BirdSimPackage/Enemies/*.java
 
 make clean:
 	rm ./BirdSimPackage/*.class

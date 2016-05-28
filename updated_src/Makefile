@@ -2,10 +2,10 @@
 # "make clean" to clean all .class files
 
 prog: my.class 
-	appletviewer BirdGamePackage.html
+	appletviewer BirdSimPackage.html
 
-my.class: BirdGamePackage
-	javac ./BirdGamePackage/*.java
+my.class: BirdSimPackage
+	javac ./BirdSimPackage/*.java
 
 make clean:
-	rm ./BirdGamePackage/*.class
+	rm ./BirdSimPackage/*.class

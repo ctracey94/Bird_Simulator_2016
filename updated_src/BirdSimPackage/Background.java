@@ -1,15 +1,23 @@
+/**************************************************
+ *    											  *
+ *    Background.java						      *
+ *    from Kilobolt Studios under MIT License     *
+ *    adapted by Zhibin Zhang			          *
+ *												  *
+ **************************************************/
 package BirdSimPackage;
 
 public class Background {
 	private int bgX, bgY, speedX;
 
+	// Constructor
 	public Background(int x, int y) {
 		bgX = x;
 		bgY = y;
 		speedX = 0;
 	}
 
-	// setters
+	// Setters
 	public int getBgX() {
 		return bgX;
 	}
@@ -22,7 +30,7 @@ public class Background {
 		return speedX;
 	}
 
-	// getters
+	// Getters
 	public void setBgX(int x) {
 		this.bgX = x;
 	}
@@ -35,6 +43,7 @@ public class Background {
 		this.speedX = speed;
 	}
 
+	// Update function
 	public void update() {
 		bgX += speedX;
 

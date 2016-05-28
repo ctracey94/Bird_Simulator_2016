@@ -1,9 +1,13 @@
+/**************************************************
+ *    											  *
+ *    Animation.java						      *
+ *    from Kilobolt Studios under MIT License     *
+ *												  *
+ **************************************************/
 package BirdSimPackage;
 
 import java.awt.Image;
 import java.util.ArrayList;
-
-
 
 public class Animation {
 

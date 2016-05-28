@@ -1,3 +1,9 @@
+/**************************************************
+ *    											  *
+ *    Bird.java						      		  *
+ *    by Conor Tracey, Jacob Brown, Zhibin Zhang  *
+ *												  *
+ **************************************************/
 package BirdSimPackage;
 
 import java.awt.Rectangle;
@@ -278,6 +284,7 @@ public class Bird extends Entity{
     	this.onGround = onGround;
     }
     
+    // kill function
     public void kill(){
     	alive = false;
     	this.velocityY = -8;

@@ -1,3 +1,9 @@
+/**************************************************
+ *    											  *
+ *    Entity.java						          *
+ *    by Conor Tracey						      *
+ *												  *
+ **************************************************/
 package BirdSimPackage;
 
 import BirdSimPackage.Environment;

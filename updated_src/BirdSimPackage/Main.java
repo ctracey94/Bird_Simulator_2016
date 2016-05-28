@@ -1,4 +1,11 @@
-// Based on Kilobolt Java game tutorial framework and modified
+/**************************************************
+ *    											  *
+ *    Main.java						              *
+ *    from Kilobolt Studios under MIT license     *
+ *    heavily modified by Jacob Brown, Conor	  *
+ *    Tracey, Zhibin Zhang					      *
+ *												  *
+ **************************************************/
 
 package BirdSimPackage;
 
@@ -155,6 +162,7 @@ public class Main extends Applet implements Runnable, KeyListener {
     	
     	height = lines.size();
     	
+    	// plants tiles across screen through tilearray and enemies array
     	for (int j = 0; j < 20; j++){
     		String line = (String) lines.get(j);
     		for (int i = 0; i < width; i++){
@@ -177,18 +185,6 @@ public class Main extends Applet implements Runnable, KeyListener {
     		}
     	}
     	
-    	height = lines.size();
-    	
-    	for (int j = 0; j < 20; j++){
-    		String line = (String) lines.get(j);
-    		for (int i = 0; i < width; i++){
-    			if (i < line.length()){
-    				char ch = line.charAt(i);
-    				Tile t = new Tile(i, j, Character.getNumericValue(ch));
-    				tilearray.add(t);
-    			}
-    		}
-    	}
     }
     
     @Override
@@ -205,6 +201,8 @@ public class Main extends Applet implements Runnable, KeyListener {
     // to steady the framerate
     public void run() {  
             while (true) {
+            	
+            	// While GameState is set to Title, update...
             	while(state == GameState.Title){
             		flashInterval ++;
             		if(flashInterval >= 600000){
@@ -219,12 +217,12 @@ public class Main extends Applet implements Runnable, KeyListener {
             		repaint();
             	}
             	
+            	// While GameState is set to Dead, update...
             	while(state == GameState.Dead){
-
-            		
             		repaint();
             	}
         	
+            	// While GameState is set to Running, update....
 	        	while(state == GameState.Running){
 	                bird.update();
 	                
@@ -388,6 +386,7 @@ public class Main extends Applet implements Runnable, KeyListener {
         }
     }
     
+    // Updates tiles across screen
     private void updateTiles(){
     	for (int i = 0; i < tilearray.size(); i++){
     		Tile t = (Tile) tilearray.get(i);
@@ -395,6 +394,7 @@ public class Main extends Applet implements Runnable, KeyListener {
     	}
     }
     
+    // Paints tiles across screen
     private void paintTiles(Graphics g){
     	for (int i = 0; i < tilearray.size(); i++){
     		Tile t = (Tile) tilearray.get(i);
@@ -407,16 +407,15 @@ public class Main extends Applet implements Runnable, KeyListener {
     public void keyPressed(KeyEvent e) {
         
         switch (e.getKeyCode()) {
-                
         
-                // Jump / Double Jump
+            // Jump / Double Jump
             case KeyEvent.VK_W:
             	if (bird.isAlive()){
             		bird.jump();
             	}
                 break;
                 
-                // Move Left
+            // Move Left
             case KeyEvent.VK_A:
             	if (bird.isAlive()){
             		bird.moveLeft();
@@ -424,13 +423,14 @@ public class Main extends Applet implements Runnable, KeyListener {
             	}
                 break;
                 
+            // Divebomb
             case KeyEvent.VK_S:
             	if (bird.isAlive()){
             		bird.diveBomb();
             	}
                 break;
                 
-                // Move right
+            // Move right
             case KeyEvent.VK_D:
             	if (bird.isAlive()){
             		bird.moveRight();
@@ -438,15 +438,14 @@ public class Main extends Applet implements Runnable, KeyListener {
             	}
                 break;
                 
-                // Glide
+            // Glide
             case KeyEvent.VK_K:
             	if (bird.isAlive()){
             		bird.glide();
             	}
                 break;
-        
-                
-                
+            
+            // Move from title screen
             case KeyEvent.VK_SPACE:
             	if (state == GameState.Title){
             		playing = true;
@@ -491,6 +490,7 @@ public class Main extends Applet implements Runnable, KeyListener {
         // TODO Auto-generated method stub
     }
     
+    // loadAssets loads everything in one handy function
     public void loadAssets(){
     	bird_stand_right = getImage(base, "resources/bird/walk_cycle/bird_walk_right_2.png");
         bird_walk_right_1 = getImage(base, "resources/bird/walk_cycle/bird_walk_right_1.png");

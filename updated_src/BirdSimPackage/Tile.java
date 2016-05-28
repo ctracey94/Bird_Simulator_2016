@@ -1,3 +1,10 @@
+/**************************************************
+ *    											  *
+ *    Tile.java						       	      *
+ *    from Kilobolt Studios under MIT License 	  *
+ *    adapted by Jacob Brown and Conor Tracey     *
+ *												  *
+ **************************************************/
 package BirdSimPackage;
 
 import java.awt.Image;
@@ -5,6 +12,7 @@ import java.awt.Rectangle;
 
 public class Tile {
 
+	// Private & public variables
 	private int tileX, tileY, speedX;
 	private int type;
 	
@@ -15,12 +23,14 @@ public class Tile {
 	
 	private Rectangle rect;
 	
+	// Constructor
 	public Tile(int x, int y, int typeInt){
 		tileX = x * 30 - (30 * 24);
 		tileY = y * 30;
 		type = typeInt;
 		rect = new Rectangle();
 		
+		// Determines what image to use based on type
 		if (type == 1){
 			tileImage = Main.tile01;
 		} else if (type == 2){
@@ -34,7 +44,7 @@ public class Tile {
 		}
 	}
 		
-		
+	// Update loop
 	public void update(){
 		if(bird.isAlive()){
 			speedX = bg.getSpeedX();
@@ -48,6 +58,7 @@ public class Tile {
 		}
 	}
 		
+	// Getters & setters
 	public int getTileX(){
 		return tileX;
 	}
@@ -72,6 +83,7 @@ public class Tile {
 		this.tileImage = tileImage;
 	}
 	
+	// Checks collisions for bird's head and feet
 	public void checkVerticalCollision(Rectangle rectTop, Rectangle rectBottom){
 		if (rectTop.intersects(rect) && type != 0){
 			bird.setSpeedY(0);
@@ -86,6 +98,7 @@ public class Tile {
 		}
 	}
 	
+	// Checks collisions for bird's sides
 	public void checkSideCollision(Rectangle rectLeft, Rectangle rectRight){
 		if (rectLeft.intersects(rect) && type != 0){
 			bird.setSpeedX(0);

@@ -5,6 +5,9 @@
 my.class: Animation ELements MainFrame
 	javac Animation/*.java ELements/*.java MainFrame/*.java
 
+new:
+	jar -cvfm ClickMe.jar manifest.txt Animation/*.class Animation/resources/ Elements/*.class MainFrame/*.class
+
 run:  
 	java -jar ClickMe.jar
 

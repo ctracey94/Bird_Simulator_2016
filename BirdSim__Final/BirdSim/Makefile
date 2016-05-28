@@ -3,6 +3,11 @@
 # make run to run Bird Sim
 # make clean to clean all .class file
 
+# Sequence of operation
+#    make 
+#    make new
+#    make run
+
 my.class: Animation ELements MainFrame
 	javac Animation/*.java ELements/*.java MainFrame/*.java
 

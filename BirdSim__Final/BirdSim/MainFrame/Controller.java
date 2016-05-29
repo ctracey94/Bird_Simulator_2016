@@ -44,7 +44,7 @@ public class Controller extends JFrame implements KeyListener {
 		this.add(BorderLayout.CENTER, view);
 		view.setModel(model);
 		
-		try {view.loadMap("/Animation/resources/map.txt");} 
+		try {view.loadMap("Animation/resources/map.txt");} 
 		catch (IOException e) {e.printStackTrace();}
 		view.loadAssets();
 		

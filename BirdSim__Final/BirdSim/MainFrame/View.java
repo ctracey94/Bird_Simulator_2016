@@ -1,6 +1,6 @@
 /**************************************************
  *    											  *
- *    Main.java						              *
+ *    View.java						              *
  *    from Kilobolt Studios under MIT license     *
  *    heavily modified by Jacob Brown, Conor	  *
  *    Tracey, Zhibin Zhang					      *
@@ -32,11 +32,10 @@ import MainFrame.Model;
 @SuppressWarnings("serial")
 public class View extends Canvas implements Runnable {
     private Model model;
-    private int delay;
     protected Graphics graphics;
     private URL base;
     public static ArrayList<Tile> tileArray = new ArrayList<Tile>();
-    public static ArrayList<Enemy> enemies;
+    public static ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 	
     private Image image, bg, currentSprite;
     private Image tile01, tile02, tile03, tile04;
@@ -56,7 +55,6 @@ public class View extends Canvas implements Runnable {
 	
     private int flashInterval = 0;
     private boolean flash = false;
-    private boolean playing = false;
     
     @SuppressWarnings("static-access")
 	Robot_fire robotFire = model.getF();
@@ -70,75 +68,44 @@ public class View extends Canvas implements Runnable {
     private Font font = new Font("Courier", Font.BOLD, 30);
     private Font titleFont = new Font("Courier", Font.BOLD, 70);
     private Font ridersFont = new Font("Courier", Font.ITALIC, 10);
-    
-    public void setFlash(boolean f) {
-	flash = f;
-    }
-	
-    public void setPlaying(boolean p) {
-    	playing = p;
-    }
 	
     public void setModel(Model m) {
     	model = m;
     }
-	
-    public void setDelay(int d) {
-	delay = d;
-    }
-	
-    public int getDelay() {
-	return delay;
-    }
-
+    
+    // set up proper view according to different game states
     @Override
     public void run() {  
         while (true) {
-        	while(Model.state == Model.GameState.Title){
+        	
+        	if (Model.state == Model.GameState.Title){
         		flashInterval ++;
         		if(flashInterval >= 600000){
         			flash = !flash;
         			flashInterval = 0;
         		}
-        		
-        		if(playing){
-        			Model.state = Model.GameState.Running;
-        		}
-        		
-        		repaint();
-        	}
-        	
-        	while(Model.state == Model.GameState.Dead){
-
-        		
         		repaint();
         	}
     	
-        	while(Model.state == Model.GameState.Running){
-                        model.update();
-                        render(model);
-                
-                        for(int i=0; i<enemies.size();i++){
-                	     enemies.get(i).update();
-                        }
-                
+        	if (Model.state == Model.GameState.Running){
+                model.update();
+                render(model);
+  
                 if (elapsedSecs > 300){
                 	Model.getBird().kill();
                 	Model.getBird().setSpeedY(8);
                 }
 
-                animate();
-                repaint();
-                try {
-                    Thread.sleep(17);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+               animate();
+               repaint();
+               try {Thread.sleep(17);} 
+               catch (InterruptedException e) {e.printStackTrace();}
         	}
         	
         }
     }
-
+    
+    // animations for bird and robots
 	public void animate() {
 		birdWalkRight.update(17);
         birdWalkLeft.update(17);
@@ -163,6 +130,7 @@ public class View extends Canvas implements Runnable {
 		g.drawImage(image, 0, 0, this);
 	}
 	
+	// paints depending on different states of model
 	public void paint(Graphics g) {
         if (Model.state == Model.GameState.Running) {
             g.setColor(Color.MAGENTA);
@@ -171,30 +139,32 @@ public class View extends Canvas implements Runnable {
             // Draws background images
             g.drawImage(bg, Model.getBg1().getBgX(), Model.getBg1().getBgY(), this);
             g.drawImage(bg, Model.getBg2().getBgX(), Model.getBg2().getBgY(), this);
+            
+            // paint enemies, tiles, bird (depending on move of bird)
             paintTiles(g);
             paintEnemies(g);
-           
-            g.drawImage(currentSprite, (int)Model.getBird().getX(), (int)Model.getBird().getY(), this);
-        
+            g.drawImage(currentSprite, (int)Model.getBird().getX(), (int)Model.getBird().getY(), this);     
             
-            
-            if (Model.getBird().isAlive() && Model.state == Model.GameState.Running){
-            	elapsedSecs = (int)(System.currentTimeMillis() - startTime)/1000;
-            } else if (Model.state == Model.GameState.Title){
-            	startTime = System.currentTimeMillis();
-            }
+            // paint timer
+            elapsedSecs = (int)(System.currentTimeMillis() - startTime)/1000;
             g.setColor(Color.BLUE);
             g.setFont(font);
             g.drawString(String.valueOf(elapsedSecs) + " / 300", 723, 27);
             g.setColor(Color.WHITE);
             g.drawString(String.valueOf(elapsedSecs) + " / 300", 725, 25);
             
-        } else if (Model.state == Model.GameState.Dead) {
+        } 
+        
+        if (Model.state == Model.GameState.Dead) {
             g.setColor(Color.BLACK);
             g.fillRect(0, 0, 900, 600);
             g.setColor(Color.RED);
             g.drawString("GAME OVER", 350, 300);
-        } else if (Model.state == Model.GameState.Title){
+        }
+        
+        if (Model.state == Model.GameState.Title){
+        	startTime = System.currentTimeMillis();
+        	
         	g.setColor(Color.WHITE);
         	g.fillRect(0,0,900,600);
         	g.setColor(Color.BLUE);
@@ -268,7 +238,7 @@ public class View extends Canvas implements Runnable {
 	
 	// paint enemies
 	private void paintEnemies(Graphics g) {
-        for(int i=0; i<enemies.size(); i++){
+        for(int i=0; i < enemies.size(); i++){
         	Enemy enemy = enemies.get(i);
         	
         	if(enemy.getType() == 0){
@@ -299,8 +269,6 @@ public class View extends Canvas implements Runnable {
     	ArrayList lines = new ArrayList();
     	int width = 0;
     	int height = 0;
-    	
-    	enemies = new ArrayList<Enemy>();
     	
     	BufferedReader reader = new BufferedReader(new FileReader(filename));
     	while(true){
@@ -871,5 +839,5 @@ public class View extends Canvas implements Runnable {
 	   
        currentSprite = bird_stand_right;
        
-	   }
+       }
 }

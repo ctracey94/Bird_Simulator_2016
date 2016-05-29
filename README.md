@@ -1,5 +1,5 @@
-# Bird_Simulator_2016
-# Author: Zhibin Zhang, Jacob Brown, Conor Tracey
+### Bird_Simulator_2016
+#### Author: Zhibin Zhang, Jacob Brown, Conor Tracey
 An action adventure game with a bird protagonist!
 
 The project proposal (proposal.pdf) can be found at the top level of the repo.   

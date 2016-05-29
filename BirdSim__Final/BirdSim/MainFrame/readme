@@ -1,0 +1,11 @@
+Controller: 
+      - takes command through keyboard 
+      - updates the state of model
+      - initializes view
+        
+View: 
+      - renders images/animations of objects according to state of model
+
+Model: 
+      - contains games objects and games logics 
+        (i.e. collisions between bird and other objects such as enemies, background, etc.)

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import Elements.Bird;
 import Elements.Background;
+import Elements.Enemy;
 import Elements.Robot_fire;
 import Elements.Robot_helmet;
 import Elements.Robot_weak;
@@ -19,7 +20,7 @@ import Elements.Tile;
 
 public class Model {
 	enum GameState {Title, Running, Dead};
-	public static GameState state = GameState.Title;
+	public static GameState state;
 	
 	private static Background bg1 = new Background(0, 0);
 	private static Background bg2 = new Background(900, 0);
@@ -30,6 +31,7 @@ public class Model {
 	private static Robot_weak robotWeak = new Robot_weak(0, 0, 0, 0, 0, 0);
 	@SuppressWarnings("rawtypes")
 	private static ArrayList tileArray = View.tileArray;
+	private static ArrayList<Enemy> enemies = View.enemies;
 	
 	public static Bird getBird() {
 		return bird;
@@ -55,6 +57,7 @@ public class Model {
 		return robotWeak;
 	}
 	
+	// update all objects' state
 	public void update() {
         if (bird.getY() > 900){
         	state = GameState.Dead;
@@ -66,6 +69,13 @@ public class Model {
 		robotHelmet.update();
 		robotWeak.update();
 		updateTiles();
+		updateEnemies();
+	}
+	
+	public void updateEnemies() {
+		for(int i = 0; i < enemies.size();i++){
+			enemies.get(i).update();
+        }
 	}
 	
 	public void updateTiles() {

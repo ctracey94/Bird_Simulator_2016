@@ -1,1 +1,21 @@
+Elements Package contains:
 
+    Background.java - a class for background being rendered properly according to its positions and speed
+    
+    Environment.java - a class containing environmental variables for the whole game
+    
+    Tile.java - a class for tile objects that are described in Animation/resources/map.txt
+    
+    Entity.java - a super class for bird and enemies
+    
+        - Bird.java - a subclass from Entity.java 
+      
+        - Enemy.java - a subclass from Entity.java, a super class for robot fire, helmet, and weak
+        
+            - Robot_fire.java
+            
+            - Robot_helmet.java
+            
+            - Robot_weak.java
+      
+        

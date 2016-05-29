@@ -1,0 +1,10 @@
+description for map.txt
+    0 - nothing
+    1 - tile01.png
+    2 - tile02.png
+    3 - tile03.png
+    4 - tile04.png
+    
+    7 - Robot_weak
+    8 - Robot_helmet
+    9 - Robot_fire

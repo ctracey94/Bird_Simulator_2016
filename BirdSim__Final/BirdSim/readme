@@ -1,0 +1,19 @@
+MainFrame package serves as the engine of whole game
+    - Controller.java
+    - Model.java 
+    - View.java
+    
+Animation package is a subpackage for Model.java
+    - Animation.java
+    - resources
+    
+Elements package is a subpackage for View.java
+    - Background.java
+    - Environment.java
+    - Tile.java
+    - Entity.java
+    - Bird.java
+    - Enemy.java
+    - Robot_fire.java
+    - Robot_helmet.java
+    - Robot_weak.java

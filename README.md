@@ -24,4 +24,5 @@ BirdSim.zip is a distributable file for users.  -- unzip it after download and d
                 make  (compile all .java files)
                 make run  (run the game in appletviewer/ a browser)
     
+    View our repository wiki for more information !
     

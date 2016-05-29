@@ -3,6 +3,8 @@ An action adventure game with a bird protagonist!
 
 The project proposal (proposal.pdf) can be found at the top level of the repo.
 
+
+
 This repository contains two versions of our project, and they give same outputs. However:
     
     BirdSim_Final:

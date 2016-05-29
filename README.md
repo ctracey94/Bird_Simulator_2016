@@ -1,9 +1,10 @@
 # Bird_Simulator_2016
 An action adventure game with a bird protagonist!
 
-The project proposal (proposal.pdf) can be found at the top level of the repo.
-
-
+The project proposal (proposal.pdf) can be found at the top level of the repo.       
+    
+     
+     
 
 This repository contains two versions of our project, and they give same outputs. However:
     

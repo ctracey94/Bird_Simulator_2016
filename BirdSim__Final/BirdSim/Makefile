@@ -1,6 +1,6 @@
 # make to compile Bird Sim
 # make new to create a new ClickMe.jar
-# make run to run Bird Sim
+# make run to run ClickMe.jar 
 # make clean to clean all .class file
 
 # Sequence of operation

@@ -31,15 +31,15 @@ import MainFrame.Model;
 
 @SuppressWarnings("serial")
 public class View extends Canvas implements Runnable {
-	private Model model;
-	private int delay;
-	protected Graphics graphics;
-	private URL base;
-	public static ArrayList<Tile> tileArray = new ArrayList<Tile>();
-	public static ArrayList<Enemy> enemies;
+    private Model model;
+    private int delay;
+    protected Graphics graphics;
+    private URL base;
+    public static ArrayList<Tile> tileArray = new ArrayList<Tile>();
+    public static ArrayList<Enemy> enemies;
 	
-	private Image image, bg, currentSprite;
-	private Image tile01, tile02, tile03, tile04;
+    private Image image, bg, currentSprite;
+    private Image tile01, tile02, tile03, tile04;
     private Image bird_stand_right, bird_walk_right_1, bird_walk_right_2;
     private Image bird_stand_left, bird_walk_left_1, bird_walk_left_2;
     private Image bird_glide_left_1, bird_glide_left_2, bird_glide_right_1, bird_glide_right_2;
@@ -71,28 +71,28 @@ public class View extends Canvas implements Runnable {
     private Font titleFont = new Font("Courier", Font.BOLD, 70);
     private Font ridersFont = new Font("Courier", Font.ITALIC, 10);
     
-	public void setFlash(boolean f) {
-		flash = f;
-	}
+    public void setFlash(boolean f) {
+	flash = f;
+    }
 	
-	public void setPlaying(boolean p) {
-		playing = p;
-	}
+    public void setPlaying(boolean p) {
+    	playing = p;
+    }
 	
     public void setModel(Model m) {
     	model = m;
     }
 	
-	public void setDelay(int d) {
-		delay = d;
-	}
+    public void setDelay(int d) {
+	delay = d;
+    }
 	
-	public int getDelay() {
-		return delay;
-	}
+    public int getDelay() {
+	return delay;
+    }
 
-	@Override
-	public void run() {  
+    @Override
+    public void run() {  
         while (true) {
         	while(Model.state == Model.GameState.Title){
         		flashInterval ++;
@@ -115,12 +115,12 @@ public class View extends Canvas implements Runnable {
         	}
     	
         	while(Model.state == Model.GameState.Running){
-                model.update();
-                render(model);
+                        model.update();
+                        render(model);
                 
-                for(int i=0; i<enemies.size();i++){
-                	enemies.get(i).update();
-                }
+                        for(int i=0; i<enemies.size();i++){
+                	     enemies.get(i).update();
+                        }
                 
                 if (elapsedSecs > 300){
                 	Model.getBird().kill();

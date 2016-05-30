@@ -5,7 +5,7 @@
 my.class: BirdSimPackage
 	javac ./BirdSimPackage/*.java ./BirdSimPackage/Enemies/*.java
 	
-run: my.class 
+run: 
 	appletviewer BirdSimPackage.html
 
 make clean:
